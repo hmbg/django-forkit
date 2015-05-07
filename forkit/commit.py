@@ -66,9 +66,8 @@ def _memoize_commit(instance, **kwargs):
     instance.save()
     _commit_related(instance, memo=memo, stack=stack, **kwargs)
 
-    if root:
-        for value in iter(stack):
-            _memoize_commit(value, memo=memo, stack=[], **kwargs)
+    while stack:
+        _memoize_commit(stack.pop(), memo=memo, stack=[], **kwargs)
 
     # post-signal
     signals.post_commit.send(sender=reference.__class__, reference=reference,
