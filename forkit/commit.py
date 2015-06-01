@@ -1,6 +1,7 @@
 from django.db import models, transaction
 from forkit import utils, signals
 
+
 def _commit_direct(instance, memo, **kwargs):
     """Recursively set all direct related object references to the
     instance object. Each downstream related object is saved before
@@ -14,6 +15,7 @@ def _commit_direct(instance, memo, **kwargs):
         _memoize_commit(value, memo=memo, **kwargs)
         # save the object to get a primary key
         setattr(instance, accessor, value)
+
 
 def _commit_related(instance, memo, stack, **kwargs):
     relations = instance._commits.related.items()
@@ -35,13 +37,13 @@ def _commit_related(instance, memo, stack, **kwargs):
 
             setattr(instance, accessor, value)
 
+
 def _memoize_commit(instance, **kwargs):
     if not hasattr(instance, '_commits'):
         return instance
 
     reference = instance._commits.reference
 
-    root = False
     memo = kwargs.pop('memo', None)
     stack = kwargs.pop('stack', [])
 
@@ -50,7 +52,6 @@ def _memoize_commit(instance, **kwargs):
     # ensures relationships that follow back up the tree are caught and are
     # merely referenced rather than traversed again.
     if memo is None:
-        root = True
         memo = utils.Memo()
     elif memo.has(reference):
         return memo.get(reference)
@@ -74,6 +75,7 @@ def _memoize_commit(instance, **kwargs):
         instance=instance, **kwargs)
 
     return instance
+
 
 @transaction.commit_on_success
 def commit_model_object(instance, **kwargs):
