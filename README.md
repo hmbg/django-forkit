@@ -1,7 +1,8 @@
 Overview
 ========
 Django-Forkit is composed of a set of utility functions for _forking_,
-_resetting_, and _diffing_ model objects. Below are a list of the current
+_resetting_, and _diffing_ model objects. Django 1.6 and 1.7 are supported. 
+Below are a list of the current
 utility functions:
 
 forkit.tools.fork
